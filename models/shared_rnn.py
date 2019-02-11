@@ -138,7 +138,6 @@ class RNN(models.shared_base.SharedModel):
 
         self.args = args
         self.corpus = corpus
-
         self.decoder = nn.Linear(args.shared_hid, corpus.num_tokens)
         self.encoder = EmbeddingDropout(corpus.num_tokens,
                                         args.shared_embed,

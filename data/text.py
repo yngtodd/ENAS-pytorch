@@ -1,8 +1,12 @@
 # Code from https://github.com/salesforce/awd-lstm-lm
 import os
 import torch as t
+import numpy as np
 
 import collections
+
+from nlp.data import Synthetic
+from nlp.data import train_valid_split
 
 
 class Dictionary(object):
@@ -58,3 +62,22 @@ class Corpus(object):
                     token += 1
 
         return ids
+
+
+class TorchCorpus:
+    def __init__(self, path, target):
+        self.train_valid_data = Synthetic(path, 'train', download=True, target=target)
+        self.test_data = Synthetic(path, 'test', target=target)
+        self.get_train_valid()
+        self.get_test()
+
+    def get_train_valid(self):
+        x, _ = self.train_valid_data.load_data()
+        unique, counts = np.unique(x, return_counts=True) 
+        self.num_tokens = sum(unique)
+        self.train = t.tensor(x) 
+        self.valid = t.tensor(x) 
+
+    def get_test(self):
+        test, _ = self.test_data.load_data()
+        self.test = t.tensor(test)

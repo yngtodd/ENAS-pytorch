@@ -21,7 +21,8 @@ def main(args):  # pylint:disable=redefined-outer-name
         torch.cuda.manual_seed(args.random_seed)
 
     if args.network_type == 'rnn':
-        dataset = data.text.Corpus(args.data_path)
+        #dataset = data.text.Corpus(args.data_path)
+        dataset = data.text.TorchCorpus(args.data_path, 0)
     elif args.dataset == 'cifar':
         dataset = data.image.Image(args.data_path)
     else:
